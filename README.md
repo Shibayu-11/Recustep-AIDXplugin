@@ -146,6 +146,27 @@ Recustep-AIDXplugin/
 
 ---
 
+## ECC互換リソース
+
+本システムは [everything-claude-code](https://github.com/affaan-m/everything-claude-code) をベースにしており、
+Claude Code利用時には access to 47 agents, 196 skills, and 79 legacy command shims が利用可能です。
+
+| カテゴリ | 数 |
+|---------|-----|
+| **Agents** | 47 agents |
+| **Skills** | 196 skills |
+| **Commands** | 79 commands |
+
+### マルチハーネス対応
+
+| Feature | Claude Code | Cursor IDE | Codex CLI | OpenCode |
+|---------|------------|------------|-----------|----------|
+| **Agents** | 47 | Shared (AGENTS.md) | Shared (AGENTS.md) | 12 |
+| **Commands** | 79 | Shared | Instruction-based | 31 |
+| **Skills** | 196 | Shared | 10 (native format) | 37 |
+
+---
+
 ## 技術スタック
 
 | レイヤー | 技術 |

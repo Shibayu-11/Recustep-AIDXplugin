@@ -7,6 +7,6 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
-| #1654 | 11:30 AM |  | Reviewed ECC CLI tool architecture | ~527 |
-| #1630 | 11:27 AM |  | Examined modular installation system supporting multiple targets and installation modes | ~565 |
+| #1654 | 11:30 AM | 🔵 | Reviewed ECC CLI tool architecture | ~527 |
+| #1630 | 11:27 AM | 🔵 | Examined modular installation system supporting multiple targets and installation modes | ~565 |
 </claude-mem-context>

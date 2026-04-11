@@ -7,5 +7,5 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
-| #1661 | 11:31 AM |  | Reviewed ECC 2.0 TUI control plane architecture | ~672 |
+| #1661 | 11:31 AM | 🔵 | Reviewed ECC 2.0 TUI control plane architecture | ~672 |
 </claude-mem-context>

@@ -25,7 +25,18 @@
       "Bash(echo \"EXIT: $?\")",
       "Bash(node scripts/ci/check-unicode-safety.js --write)",
       "Bash(node scripts/ci/validate-skills.js)",
-      "Bash(node scripts/ci/validate-rules.js)"
+      "Bash(node scripts/ci/validate-rules.js)",
+      "Bash(node scripts/ci/validate-agents.js)",
+      "Bash(echo \"---EXIT:$?\")",
+      "Bash(node scripts/ci/validate-commands.js)",
+      "Bash(node scripts/ci/validate-hooks.js)",
+      "Bash(node scripts/ci/validate-install-manifests.js)",
+      "Bash(node scripts/ci/validate-no-personal-paths.js)",
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(node scripts/ci/catalog.js --text)",
+      "Bash(ls agents/*.md)",
+      "Bash(node scripts/ci/catalog.js --write --text)"
     ]
   }
 }
