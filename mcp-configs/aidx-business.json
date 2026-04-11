@@ -1,0 +1,69 @@
+{
+  "mcpServers": {
+    "google-calendar": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-google-calendar"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID_HERE",
+        "GOOGLE_CLIENT_SECRET": "YOUR_GOOGLE_CLIENT_SECRET_HERE",
+        "GOOGLE_REDIRECT_URI": "http://localhost:3000/oauth/callback"
+      },
+      "description": "Google Calendar連携 — 予定の作成・取得・更新・削除。秘書エージェントがスケジュール管理に使用"
+    },
+    "gmail": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-gmail"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID_HERE",
+        "GOOGLE_CLIENT_SECRET": "YOUR_GOOGLE_CLIENT_SECRET_HERE",
+        "GOOGLE_REDIRECT_URI": "http://localhost:3000/oauth/callback"
+      },
+      "description": "Gmail連携 — メール送受信・検索・ラベル管理。秘書エージェントがメール対応に使用"
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "YOUR_SLACK_BOT_TOKEN_HERE",
+        "SLACK_TEAM_ID": "YOUR_SLACK_TEAM_ID_HERE"
+      },
+      "description": "Slack連携 — メッセージ送受信・チャンネル管理。議事録の自動投稿、アクションアイテム通知に使用"
+    },
+    "chatwork": {
+      "command": "npx",
+      "args": ["-y", "chatwork-mcp-server"],
+      "env": {
+        "CHATWORK_API_TOKEN": "YOUR_CHATWORK_API_TOKEN_HERE"
+      },
+      "description": "Chatwork連携 — メッセージ送受信・タスク管理。日本企業で多く使われるビジネスチャット"
+    },
+    "google-drive": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-google-drive"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID_HERE",
+        "GOOGLE_CLIENT_SECRET": "YOUR_GOOGLE_CLIENT_SECRET_HERE",
+        "GOOGLE_REDIRECT_URI": "http://localhost:3000/oauth/callback"
+      },
+      "description": "Google Drive連携 — ファイル検索・取得・共有。社内ドキュメントの参照に使用"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./data"],
+      "description": "ローカルファイル操作 — data/ディレクトリ内のExcel・PDF・CSVへのアクセス"
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "description": "永続メモリ — セッション間で記憶を維持。取引先情報・過去の分析結果を蓄積"
+    }
+  },
+  "_comments": {
+    "usage": "AIDX経営エージェント向けMCP設定。必要なサーバーを ~/.claude.json の mcpServers にコピーしてください",
+    "google_setup": "Google系MCPを使うには Google Cloud Console でOAuth 2.0認証情報を作成し、Gmail API / Calendar API / Drive API を有効化してください",
+    "slack_setup": "Slack MCPを使うには https://api.slack.com/apps でBotを作成し、Bot Token Scopesに chat:write, channels:read, channels:history を追加してください",
+    "chatwork_setup": "Chatwork MCPを使うには https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php でAPIトークンを取得してください",
+    "recommended_minimum": "最小構成: filesystem + memory。フル構成: 全サーバー有効化",
+    "context_warning": "MCPサーバーは同時10個以下を推奨（コンテキストウィンドウ圧迫防止）"
+  }
+}

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIDX経営エージェント — AI部下チームで経営を加速する | Rikustep</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --black: #111;
+    --lime: #c8ff00;
+    --gray: #e8e5df;
+    --gray2: #d5d2cc;
+    --muted: #888;
+    --white: #fff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--black);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--black);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::after {
+    content: 'AIDX';
+    position: absolute;
+    bottom: -2rem;
+    right: -1rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20rem;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .cover-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--lime);
+    text-transform: uppercase;
+  }
+  .cover-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+  .cover-body { position: relative; z-index: 1; }
+  .cover-tag {
+    display: inline-block;
+    border: 1px solid rgba(200,255,0,0.4);
+    color: var(--lime);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.4rem 1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .cover-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.9;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+  .cover-title .accent { color: var(--lime); }
+  .cover-subtitle {
+    font-size: 1.1rem;
+    color: #aaa;
+    max-width: 560px;
+    line-height: 1.9;
+  }
+  .cover-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+  .cover-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    line-height: 2;
+  }
+
+  /* ── BODY ── */
+  .doc { max-width: 860px; margin: 0 auto; padding: 5rem 3rem; }
+
+  .ch {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--black);
+  }
+  .ch-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--lime);
+    background: var(--black);
+    padding: 0.2rem 0.8rem;
+    flex-shrink: 0;
+  }
+  .ch-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .prose { font-size: 0.95rem; line-height: 1.9; color: #333; margin-bottom: 2rem; }
+  .prose strong { color: var(--black); font-weight: 700; }
+
+  .hbox {
+    background: var(--black);
+    color: var(--white);
+    padding: 2rem 2.5rem;
+    margin: 2rem 0;
+    border-left: 4px solid var(--lime);
+  }
+  .hbox p { font-size: 1rem; line-height: 1.8; color: #ccc; }
+  .hbox strong { color: var(--lime); }
+
+  .quote {
+    border-left: 3px solid var(--lime);
+    padding: 1rem 2rem;
+    background: var(--white);
+    margin: 2rem 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.7;
+  }
+
+  .divider { height: 1px; background: var(--gray2); margin: 4rem 0; }
+
+  /* ── PAIN GRID ── */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--gray2);
+    margin: 2rem 0;
+  }
+  .pain {
+    background: var(--white);
+    padding: 2rem;
+  }
+  .pain-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+  .pain h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .pain p { font-size: 0.82rem; color: #666; line-height: 1.7; }
+
+  /* ── AGENT CARDS ── */
+  .agent-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--gray2);
+    margin: 2rem 0;
+  }
+  .agent {
+    background: var(--white);
+    padding: 2rem;
+  }
+  .agent-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray);
+  }
+  .agent-icon { font-size: 1.8rem; width: 3rem; text-align: center; }
+  .agent-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+  }
+  .agent-name { font-size: 1rem; font-weight: 700; }
+  .agent-list { list-style: none; }
+  .agent-list li {
+    font-size: 0.8rem;
+    color: #555;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid var(--gray);
+    display: flex;
+    gap: 0.5rem;
+  }
+  .agent-list li::before {
+    content: '→';
+    color: #aaa;
+    flex-shrink: 0;
+    font-size: 0.7rem;
+  }
+
+  /* ── COMPARISON ── */
+  .compare {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.85rem;
+  }
+  .compare th {
+    background: var(--black);
+    color: var(--white);
+    padding: 0.8rem 1rem;
+    text-align: left;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    font-weight: 400;
+  }
+  .compare td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--gray);
+    vertical-align: top;
+  }
+  .compare tr:nth-child(even) td { background: var(--gray); }
+  .compare .highlight { background: rgba(200,255,0,0.15) !important; font-weight: 700; }
+
+  /* ── STEPS ── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--gray2);
+    margin: 2rem 0;
+  }
+  .step { background: var(--white); padding: 1.8rem 1.2rem; text-align: center; }
+  .step-n {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--lime);
+    background: var(--black);
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+  }
+  .step h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .step p { font-size: 0.75rem; color: #888; line-height: 1.6; }
+
+  /* ── PRICING ── */
+  .biz-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--gray2);
+    margin: 2rem 0;
+  }
+  .biz-card { background: var(--white); padding: 2rem; }
+  .biz-card.star { background: var(--black); color: var(--white); }
+  .biz-tier {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .biz-card.star .biz-tier { color: #666; }
+  .biz-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+    line-height: 1;
+  }
+  .biz-card.star .biz-name { color: var(--lime); }
+  .biz-price {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray);
+  }
+  .biz-card.star .biz-price { border-color: #333; }
+  .biz-list { list-style: none; font-size: 0.8rem; }
+  .biz-list li {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--gray);
+    color: #555;
+    display: flex;
+    gap: 0.5rem;
+  }
+  .biz-card.star .biz-list li { color: #999; border-color: #222; }
+  .biz-list li::before { content: '✓'; color: var(--lime); flex-shrink: 0; font-size: 0.7rem; }
+
+  /* ── CTA ── */
+  .cta {
+    background: var(--black);
+    padding: 4rem 3rem;
+    text-align: center;
+  }
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .cta-title .accent { color: var(--lime); }
+  .cta-sub { color: #888; font-size: 1rem; margin-bottom: 2rem; }
+  .cta-btn {
+    display: inline-block;
+    background: var(--lime);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 1rem 3rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity 0.2s;
+  }
+  .cta-btn:hover { opacity: 0.85; }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    background: var(--black);
+    color: #555;
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+  }
+  .doc-footer span { color: var(--lime); }
+
+  @media (max-width: 700px) {
+    .doc { padding: 3rem 1.5rem; }
+    .agent-grid, .pain-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .biz-grid { grid-template-columns: 1fr; }
+    .cover { padding: 2rem; }
+  }
+  @media print {
+    .cover { min-height: auto; page-break-after: always; }
+    .cta { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── COVER ── -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-logo">Rikustep × AIDX</div>
+    <div class="cover-date">2026 — SERVICE GUIDE</div>
+  </div>
+  <div class="cover-body">
+    <div class="cover-tag">for CEOs & Management Teams</div>
+    <h1 class="cover-title">
+      AI部下チームで<br>
+      <span class="accent">経営を加速する</span>
+    </h1>
+    <p class="cover-subtitle">
+      GitHubをクローンして、APIキーを貼るだけ。<br>
+      財務・法務・労務・秘書・戦略——<br>
+      5人のAI部下が即日稼働します。
+    </p>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-meta">
+      <div>PRODUCT: AIDX Management Agent System</div>
+      <div>BY: Rikustep</div>
+      <div>POWERED BY: Claude API × Anthropic</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="doc">
+
+  <!-- ── CH1: 課題 ── -->
+  <div class="ch">
+    <div class="ch-num">01</div>
+    <h2 class="ch-title">経営者の課題</h2>
+  </div>
+
+  <p class="prose">
+    中小〜中堅企業の経営者は、<strong>財務・法務・労務・戦略</strong>の全てを自分で判断しなければなりません。
+    専門家を雇えば年間数百万円。外部コンサルは月額数十万円。
+    かといって、AIツールは「使いこなせない」「定着しない」「情報漏洩が心配」——。
+  </p>
+
+  <div class="pain-grid">
+    <div class="pain">
+      <div class="pain-icon">💸</div>
+      <h4>コストが高すぎる</h4>
+      <p>顧問弁護士・税理士・社労士・コンサルを全部揃えると年間1,000万円超。中小企業にはキツい。</p>
+    </div>
+    <div class="pain">
+      <div class="pain-icon">😵</div>
+      <h4>全部自分でやっている</h4>
+      <p>契約書のチェック、議事録の作成、給与計算の確認——。社長がやることじゃないのに社長がやっている。</p>
+    </div>
+    <div class="pain">
+      <div class="pain-icon">🤖</div>
+      <h4>AIツールが定着しない</h4>
+      <p>ChatGPTを試したけど、使いこなせるのは一部の社員だけ。全社導入は結局失敗した。</p>
+    </div>
+    <div class="pain">
+      <div class="pain-icon">🔒</div>
+      <h4>情報漏洩が怖い</h4>
+      <p>財務データ・契約書・給与情報をクラウドAIに入れていいのか？セキュリティ担当者がいない。</p>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
+  <!-- ── CH2: 解決策 ── -->
+  <div class="ch">
+    <div class="ch-num">02</div>
+    <h2 class="ch-title">AIDXの解決策</h2>
+  </div>
+
+  <div class="quote">
+    コンサルの代わりになる知能を、ローカルで、誰でも使える形で届ける。
+  </div>
+
+  <p class="prose">
+    AIDXは、<strong>5人のAI専門家チーム</strong>をあなたのPCに丸ごとインストールします。
+    データは全てローカルで処理。外部に出るのはClaudeへの質問だけ。
+    話しかけるだけで、最適な専門エージェントが自動で対応します。
+  </p>
+
+  <div class="hbox">
+    <p>
+      <strong>他のAIツールとの違い:</strong>
+      SaaSではなく、あなたのPC上で動くシステムです。
+      月額課金はなし。Anthropic APIの従量課金（月額数千円〜）のみ。
+      データは外部サーバーに保存されず、完全にあなたの管理下にあります。
+    </p>
+  </div>
+
+
+  <div class="divider"></div>
+
+  <!-- ── CH3: 5つのエージェント ── -->
+  <div class="ch">
+    <div class="ch-num">03</div>
+    <h2 class="ch-title">5人のAI部下</h2>
+  </div>
+
+  <p class="prose">
+    オーケストレーター（司令塔）があなたの指示を聞いて、最適なエージェントに自動で振り分けます。
+    「売上を分析して」と言えば財務へ。「この契約書をチェックして」と言えば法務へ。あなたは話しかけるだけ。
+  </p>
+
+  <div class="agent-grid">
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-icon">💰</div>
+        <div>
+          <div class="agent-label">Finance Agent</div>
+          <div class="agent-name">財務エージェント</div>
+        </div>
+      </div>
+      <ul class="agent-list">
+        <li>PL / BS / CF 読み込み・分析</li>
+        <li>KPIモニタリング・予実管理</li>
+        <li>資金繰り予測・アラート</li>
+        <li>投資対効果シミュレーション</li>
+        <li>HTML品質財務レポート生成</li>
+      </ul>
+    </div>
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-icon">⚖️</div>
+        <div>
+          <div class="agent-label">Legal Agent</div>
+          <div class="agent-name">法務エージェント</div>
+        </div>
+      </div>
+      <ul class="agent-list">
+        <li>契約書PDF リスク箇所抽出</li>
+        <li>条項の解釈・修正提案生成</li>
+        <li>NDA / 業務委託 雛形作成</li>
+        <li>コンプライアンスチェック</li>
+        <li>リスクレベル可視化レポート</li>
+      </ul>
+    </div>
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-icon">👥</div>
+        <div>
+          <div class="agent-label">HR / Labor Agent</div>
+          <div class="agent-name">労務エージェント</div>
+        </div>
+      </div>
+      <ul class="agent-list">
+        <li>就業規則 Q&A・解釈サポート</li>
+        <li>36協定・残業管理支援</li>
+        <li>採用要件定義・評価制度設計</li>
+        <li>給与計算サポート</li>
+        <li>社労士相談前の論点整理</li>
+      </ul>
+    </div>
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-icon">📋</div>
+        <div>
+          <div class="agent-label">Secretary Agent</div>
+          <div class="agent-name">秘書エージェント</div>
+        </div>
+      </div>
+      <ul class="agent-list">
+        <li>議事録自動生成 + アクション抽出</li>
+        <li>スケジュール整理・調整</li>
+        <li>メール・提案書・報告書作成</li>
+        <li>ToDoリスト管理</li>
+        <li>Gmail / Calendar 自動連携</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="agent-grid" style="grid-template-columns: 1fr;">
+    <div class="agent">
+      <div class="agent-head">
+        <div class="agent-icon">🎯</div>
+        <div>
+          <div class="agent-label">Strategy Agent</div>
+          <div class="agent-name">経営戦略エージェント</div>
+        </div>
+      </div>
+      <ul class="agent-list" style="column-count:2;column-gap:2rem;">
+        <li>事業計画書作成支援</li>
+        <li>SWOT / 3C / PEST 分析</li>
+        <li>競合調査・市場分析</li>
+        <li>KPI設計・OKR策定</li>
+        <li>新規事業アイデア壁打ち</li>
+        <li>投資家向け資料・HTML提案書生成</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
+  <!-- ── CH4: 比較 ── -->
+  <div class="ch">
+    <div class="ch-num">04</div>
+    <h2 class="ch-title">コスト比較</h2>
+  </div>
+
+  <table class="compare">
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>従来の方法</th>
+        <th>AIDX</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>財務分析</strong></td>
+        <td>税理士顧問 月5〜15万円</td>
+        <td class="highlight">API利用料のみ（月数千円〜）</td>
+      </tr>
+      <tr>
+        <td><strong>法務チェック</strong></td>
+        <td>弁護士 契約書1件 5〜30万円</td>
+        <td class="highlight">何件でもAPI利用料のみ</td>
+      </tr>
+      <tr>
+        <td><strong>労務相談</strong></td>
+        <td>社労士顧問 月3〜10万円</td>
+        <td class="highlight">API利用料のみ</td>
+      </tr>
+      <tr>
+        <td><strong>秘書業務</strong></td>
+        <td>秘書人件費 月30〜50万円</td>
+        <td class="highlight">API利用料のみ</td>
+      </tr>
+      <tr>
+        <td><strong>戦略コンサル</strong></td>
+        <td>コンサルファーム 月50〜200万円</td>
+        <td class="highlight">API利用料のみ</td>
+      </tr>
+      <tr>
+        <td><strong>情報セキュリティ</strong></td>
+        <td>クラウドサービスに依存</td>
+        <td class="highlight">完全ローカル処理</td>
+      </tr>
+      <tr>
+        <td><strong>導入期間</strong></td>
+        <td>数週間〜数ヶ月</td>
+        <td class="highlight">5分</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="hbox">
+    <p>
+      <strong>注意:</strong>
+      AIDXは専門家の代替ではなく、補佐です。
+      重要な法務・税務判断は必ず専門家に確認してください。
+      AIDXがあれば、専門家への相談がより的確で効率的になります。
+    </p>
+  </div>
+
+
+  <div class="divider"></div>
+
+  <!-- ── CH5: 導入ステップ ── -->
+  <div class="ch">
+    <div class="ch-num">05</div>
+    <h2 class="ch-title">導入は4ステップ</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">1</div>
+      <h4>Anthropicに登録</h4>
+      <p>claude.ai でアカウント作成、APIプランに加入</p>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <h4>クローン</h4>
+      <p>GitHubからコマンド1つで全エージェントが手元に</p>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <h4>APIキー設定</h4>
+      <p>.envファイルにキーを貼るだけ</p>
+    </div>
+    <div class="step">
+      <div class="step-n">4</div>
+      <h4>起動</h4>
+      <p>python main.py であとはAI部下に話しかけるだけ</p>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
+  <!-- ── CH6: 料金 ── -->
+  <div class="ch">
+    <div class="ch-num">06</div>
+    <h2 class="ch-title">サービスプラン</h2>
+  </div>
+
+  <p class="prose">
+    AIDXシステム自体は<strong>オープンソース（無料）</strong>です。
+    Rikustepは導入支援と経営顧問として価値を提供します。
+    クライアントが負担するのは<strong>Anthropic APIの従量課金のみ</strong>（月額数千円〜）。
+  </p>
+
+  <div class="biz-grid">
+    <div class="biz-card">
+      <div class="biz-tier">Tier 01</div>
+      <div class="biz-name">AIDX<br>導入支援</div>
+      <div class="biz-price">初期費用 + 月額保守</div>
+      <ul class="biz-list">
+        <li>クライアントPCにセットアップ代行</li>
+        <li>CLAUDE.mdをクライアント仕様にカスタマイズ</li>
+        <li>社内データの初期投入支援</li>
+        <li>使い方トレーニング（2時間）</li>
+        <li>月1回チューニング・アップデート</li>
+      </ul>
+    </div>
+    <div class="biz-card star">
+      <div class="biz-tier">Tier 02 — 主力</div>
+      <div class="biz-name">経営顧問<br>パッケージ</div>
+      <div class="biz-price">月額顧問契約（継続収益）</div>
+      <ul class="biz-list">
+        <li>エージェントシステム導入・保守</li>
+        <li>月次財務レポートのレビュー</li>
+        <li>法務・労務の重要判断サポート</li>
+        <li>戦略MTG（月1回）AI議事録自動生成</li>
+        <li>新エージェント・MCP追加対応</li>
+        <li>Rikustep担当者のバックアップ</li>
+      </ul>
+    </div>
+    <div class="biz-card">
+      <div class="biz-tier">Tier 03</div>
+      <div class="biz-name">エンター<br>プライズ</div>
+      <div class="biz-price">カスタム見積もり</div>
+      <ul class="biz-list">
+        <li>社内サーバー構築・オンプレ対応</li>
+        <li>既存システム（基幹・会計）API連携</li>
+        <li>複数部署・複数ユーザー対応</li>
+        <li>社内専用AIナレッジベース構築</li>
+        <li>セキュリティ監査対応</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ── CTA ── -->
+<div class="cta">
+  <div class="cta-title">まずは<span class="accent">無料デモ</span>から</div>
+  <p class="cta-sub">30分のオンラインデモで、あなたの業務データを使った分析をお見せします。</p>
+  <a href="mailto:contact@rikustep.com" class="cta-btn">デモを申し込む →</a>
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="doc-footer">
+  <div>RIKUSTEP × AIDX — MANAGEMENT AGENT SYSTEM / <span>SERVICE GUIDE 2026</span></div>
+  <div>CONFIDENTIAL</div>
+</div>
+
+</body>
+</html>
