@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
+import json
+
 from .base import BaseAgent
 
-# 振り分けキーワードマッピング
+# キーワードベースのフォールバック用マッピング
 _ROUTING_KEYWORDS: dict[str, list[str]] = {
     "finance": [
         "売上", "利益", "コスト", "予算", "PL", "BS", "CF", "資金繰り",
         "KPI", "財務", "経費", "決算", "キャッシュフロー", "損益",
         "貸借", "収支", "投資", "ROI", "原価", "粗利", "営業利益",
+        "見積", "請求", "融資", "借入", "銀行",
     ],
     "legal": [
         "契約", "規約", "コンプライアンス", "NDA", "法律", "訴訟",
@@ -19,20 +22,43 @@ _ROUTING_KEYWORDS: dict[str, list[str]] = {
     "hr": [
         "採用", "退職", "給与", "残業", "就業規則", "評価", "人事",
         "労務", "36協定", "有給", "社会保険", "雇用", "解雇", "休職",
-        "勤怠", "賞与", "昇給", "研修", "オンボーディング",
+        "勤怠", "賞与", "昇給", "研修", "オンボーディング", "事業承継",
+        "後継者",
     ],
     "secretary": [
         "議事録", "メール", "スケジュール", "報告書", "提案書", "ToDo",
         "秘書", "会議", "アジェンダ", "日程", "調整", "連絡", "案内",
-        "お礼", "挨拶", "文書", "レター",
+        "お礼", "挨拶", "文書", "レター", "月次レポート",
     ],
     "strategy": [
         "戦略", "事業計画", "SWOT", "競合", "市場", "新規事業",
         "KPI設計", "OKR", "ビジョン", "ミッション", "3C", "PEST",
         "ポジショニング", "差別化", "ターゲット", "セグメント",
-        "ビジネスモデル", "スケール",
+        "ビジネスモデル", "スケール", "補助金", "助成金",
     ],
 }
+
+_CLASSIFY_PROMPT = """あなたは経営エージェントシステムの振り分け担当です。
+経営者からのメッセージを分析し、どの専門エージェントに振り分けるべきか判断してください。
+
+## 利用可能なエージェント
+- finance: 財務エージェント（売上分析、PL/BS/CF、KPI、資金繰り、見積書、請求書、融資準備）
+- legal: 法務エージェント（契約書レビュー、コンプライアンス、NDA、法的リスク）
+- hr: 労務エージェント（就業規則、残業管理、採用、評価制度、給与、事業承継）
+- secretary: 秘書エージェント（議事録、メール作成、提案書、報告書、スケジュール、月次レポート）
+- strategy: 経営戦略エージェント（SWOT分析、事業計画、競合調査、市場分析、補助金・助成金）
+
+## ルール
+- 1つまたは複数のエージェントを選択できます
+- 複数領域にまたがる場合は全て含めてください
+- どれにも該当しない場合は空リストを返してください
+- JSONのみを返してください。説明は不要です
+
+## 出力形式
+{"agents": ["finance", "legal"]}
+
+## メッセージ
+"""
 
 
 class Orchestrator(BaseAgent):
@@ -61,13 +87,13 @@ class Orchestrator(BaseAgent):
 
 ## 行動原則
 1. 経営者ファースト — 技術用語を避け、経営判断に直結する情報を提供する
-2. 要点を先に — 結論から述べ、詳細は後に続ける
-3. アクション提示 — 分析結果には必ず「次に何をすべきか」を添える
-4. 誠実さ — 分からないことは正直に伝え、専門家への相談を推奨する
+2. 結論から — 最初の1文で答えを言い切る
+3. 数字で話す — 「大幅に増加」は禁止。「前月比+12%」と言え
+4. アクション必須 — 分析で終わらない。「次に何をすべきか」を必ず提示する
+5. 悪いニュースも直球 — 「御社の解約率は月8%。このままでは9ヶ月で顧客ゼロです」
+6. 誠実さ — 分からないことは正直に伝え、専門家への相談を推奨する
 
 ## 応答フォーマット
-経営者への報告は以下の形式で行ってください：
-
 ### 📋 要約
 [1-2文で結論を述べる]
 
@@ -79,7 +105,42 @@ class Orchestrator(BaseAgent):
 """
 
     def classify(self, message: str) -> list[str]:
-        """メッセージを解析して、振り分け先のエージェント名リストを返す"""
+        """メッセージをClaude APIで意図分類し、振り分け先を返す。
+        API失敗時はキーワードマッチングにフォールバック。
+        """
+        try:
+            return self._classify_with_ai(message)
+        except Exception:
+            return self._classify_with_keywords(message)
+
+    def _classify_with_ai(self, message: str) -> list[str]:
+        """Claude APIで意図分類する"""
+        response = self.client.messages.create(
+            model=self.model,
+            max_tokens=100,
+            system="JSONのみを返してください。説明は不要です。",
+            messages=[{
+                "role": "user",
+                "content": _CLASSIFY_PROMPT + message,
+            }],
+        )
+
+        text = response.content[0].text.strip()
+        # JSON部分を抽出（余計なテキストがあっても対応）
+        start = text.find("{")
+        end = text.rfind("}") + 1
+        if start == -1 or end == 0:
+            raise ValueError("No JSON found in response")
+
+        data = json.loads(text[start:end])
+        agents = data.get("agents", [])
+
+        # 有効なエージェント名のみ返す
+        valid = [a for a in agents if a in self.agents]
+        return valid
+
+    def _classify_with_keywords(self, message: str) -> list[str]:
+        """キーワードマッチングで意図分類する（フォールバック）"""
         scores: dict[str, int] = {key: 0 for key in _ROUTING_KEYWORDS}
 
         for agent_key, keywords in _ROUTING_KEYWORDS.items():
@@ -88,11 +149,6 @@ class Orchestrator(BaseAgent):
                     scores[agent_key] += 1
 
         matched = [k for k, v in scores.items() if v > 0]
-
-        if not matched:
-            return []
-
-        # スコア順にソート
         matched.sort(key=lambda k: scores[k], reverse=True)
         return matched
 
@@ -101,11 +157,9 @@ class Orchestrator(BaseAgent):
         targets = self.classify(message)
 
         if not targets:
-            # どのエージェントにも該当しない場合は自身が汎用アシスタントとして回答
             return self.ask(message)
 
         if len(targets) == 1 and targets[0] in self.agents:
-            # 単一エージェントに振り分け
             agent = self.agents[targets[0]]
             return agent.ask(message)
 
@@ -119,10 +173,10 @@ class Orchestrator(BaseAgent):
 
         if results:
             combined = "\n\n---\n\n".join(results)
-            # オーケストレーター自身が統合レポートを作成
             summary_prompt = (
                 f"以下は各専門エージェントの分析結果です。"
-                f"経営者向けに統合レポートとしてまとめてください。\n\n{combined}"
+                f"経営者向けに統合レポートとしてまとめてください。"
+                f"結論から述べ、数字を使い、次のアクションを必ず提示してください。\n\n{combined}"
             )
             return self.ask(summary_prompt)
 
