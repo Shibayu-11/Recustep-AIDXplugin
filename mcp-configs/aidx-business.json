@@ -58,21 +58,21 @@
       "description": "簡易メモリ — セッション間で記憶を維持。GBrainが使えない場合のフォールバック"
     },
     "gbrain": {
+      "command": "bun",
+      "args": ["run", "./gbrain/src/mcp/server.ts"],
+      "env": {
+        "DATABASE_URL": "postgresql://aidx:aidx_secure_password@localhost:5432/aidx_brain",
+        "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY_HERE"
+      },
+      "description": "GBrain社内記憶（推奨） — ローカルPostgres+pgvectorによるハイブリッド検索。データは完全にPC内で完結。取引先・会議・分析結果を自動蓄積"
+    },
+    "gbrain-cloud": {
       "type": "http",
       "url": "https://YOUR_SUPABASE_REF.supabase.co/functions/v1/gbrain-mcp/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_GBRAIN_TOKEN_HERE"
       },
-      "description": "GBrain社内記憶 — Postgres+pgvectorによるハイブリッド検索。取引先・会議・分析結果を自動蓄積し、使うほど賢くなるナレッジベース"
-    },
-    "gbrain-local": {
-      "command": "bun",
-      "args": ["run", "./gbrain/src/mcp/server.ts"],
-      "env": {
-        "DATABASE_URL": "YOUR_POSTGRES_CONNECTION_STRING_HERE",
-        "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY_HERE"
-      },
-      "description": "GBrainローカルMCP — Supabaseを使わずローカルPostgresで動かす場合。完全オンプレ対応"
+      "description": "GBrainクラウド版 — Supabaseを使う場合。ローカル版を推奨するが、Docker非対応環境向けの代替"
     }
   },
   "_comments": {
@@ -80,8 +80,8 @@
     "google_setup": "Google系MCPを使うには Google Cloud Console でOAuth 2.0認証情報を作成し、Gmail API / Calendar API / Drive API を有効化してください",
     "slack_setup": "Slack MCPを使うには https://api.slack.com/apps でBotを作成し、Bot Token Scopesに chat:write, channels:read, channels:history を追加してください",
     "chatwork_setup": "Chatwork MCPを使うには https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php でAPIトークンを取得してください",
-    "gbrain_setup": "GBrainを使うには Supabase ($25/mo) + OpenAI APIキーが必要。詳細は docs/ja-JP/GBRAIN-SETUP.md を参照",
-    "recommended_minimum": "最小構成: filesystem + memory。推奨構成: filesystem + gbrain。フル構成: 全サーバー有効化",
+    "gbrain_setup": "GBrainを使うには Docker（ローカルPostgres）+ OpenAI APIキーが必要。詳細は docs/ja-JP/GBRAIN-SETUP.md を参照",
+    "recommended_minimum": "最小構成: filesystem + memory。推奨構成: filesystem + gbrain（ローカル）。フル構成: 全サーバー有効化",
     "context_warning": "MCPサーバーは同時10個以下を推奨（コンテキストウィンドウ圧迫防止）"
   }
 }

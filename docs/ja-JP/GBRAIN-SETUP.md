@@ -21,43 +21,58 @@ GBrainは、AIDXエージェントに「記憶」を与えるナレッジベー�
 
 | 項目 | 説明 | コスト |
 |------|------|--------|
-| **Supabase** | データベース（Postgres + pgvector） | $25/月 |
-| **OpenAI APIキー** | ベクトル検索用のembedding生成 | $4-5/初回、以降微量 |
+| **Docker** | ローカルPostgresの実行環境 | 無料 |
+| **OpenAI APIキー** | ベクトル検索用のembedding生成 | 初回$4-5、以降微量 |
 | **Bun** | GBrainの実行環境 | 無料 |
 
-> 合計: 月額約$25（約3,700円）で社内の全ナレッジを検索可能に。
+> 完全ローカル構成: **月額コストほぼゼロ**（OpenAI embedding費用のみ、月数百円程度）。
+> データは一切外部に出ません。
 
 ---
 
 ## セットアップ手順
 
-### Step 1: Bunをインストール
+### Step 1: Dockerをインストール
+
+- Mac: https://docs.docker.com/desktop/install/mac-install/
+- Windows: https://docs.docker.com/desktop/install/windows-install/
+- Linux: https://docs.docker.com/engine/install/
+
+インストール後、Docker Desktopを起動してください。
+
+### Step 2: ローカルPostgres + pgvectorを起動
 
 ```bash
-# Mac
+docker run -d \
+  --name aidx-brain \
+  -e POSTGRES_USER=aidx \
+  -e POSTGRES_PASSWORD=aidx_secure_password \
+  -e POSTGRES_DB=aidx_brain \
+  -p 5432:5432 \
+  --restart unless-stopped \
+  pgvector/pgvector:pg16
+```
+
+起動確認：
+
+```bash
+docker exec aidx-brain pg_isready -U aidx
+# 「accepting connections」と表示されればOK
+```
+
+> `--restart unless-stopped` により、PC再起動後も自動で立ち上がります。
+
+### Step 3: Bunをインストール
+
+```bash
+# Mac / Linux
 curl -fsSL https://bun.sh/install | bash
 
 # Windows (PowerShell)
 powershell -c "irm bun.sh/install.ps1 | iex"
 ```
 
-### Step 2: Supabaseプロジェクトを作成
-
-1. https://supabase.com/ にアクセスしてアカウント作成
-2. 「New Project」をクリック
-3. プロジェクト名: `aidx-brain` など任意
-4. パスワードを設定（メモしておく）
-5. リージョン: `Northeast Asia (Tokyo)` を選択
-6. 作成完了まで約2分待つ
-
-### Step 3: 接続文字列を取得
-
-1. Supabaseダッシュボード → 「Settings」→「Database」
-2. 「Connection string」→「URI」タブ
-3. **Shared Pooler**（Session mode、ポート6543）の接続文字列をコピー
-4. `[YOUR-PASSWORD]` を Step 2 で設定したパスワードに置き換え
-
-### Step 4: GBrainを初期化
+### Step 4: GBrainをセットアップ
 
 ```bash
 cd gbrain
@@ -65,26 +80,20 @@ cd gbrain
 # 依存パッケージをインストール
 bun install
 
+# .envを作成
+cat > .env << 'EOF'
+DATABASE_URL=postgresql://aidx:aidx_secure_password@localhost:5432/aidx_brain
+OPENAI_API_KEY=sk-xxxxxxxx
+EOF
+
 # データベースを初期化
-bun run src/cli.ts init --non-interactive --url "YOUR_CONNECTION_STRING"
+bun run src/cli.ts init --non-interactive --url "postgresql://aidx:aidx_secure_password@localhost:5432/aidx_brain"
 ```
 
-### Step 5: OpenAI APIキーを設定
+### Step 5: Claude CodeにMCP接続
 
 ```bash
-# .envに追加（gbrain/ディレクトリ内）
-echo 'OPENAI_API_KEY=sk-xxxxxxxx' >> .env
-echo 'DATABASE_URL=YOUR_CONNECTION_STRING' >> .env
-```
-
-### Step 6: Claude CodeにMCP接続
-
-```bash
-# 認証トークンを生成
-bun run src/commands/auth.ts create "aidx-agent"
-
-# Claude CodeにGBrainを追加（ローカルMCP）
-claude mcp add gbrain -- bun run src/mcp/server.ts
+claude mcp add gbrain -- bun run ./gbrain/src/mcp/server.ts
 ```
 
 または `~/.claude.json` に手動追加：
@@ -96,18 +105,17 @@ claude mcp add gbrain -- bun run src/mcp/server.ts
       "command": "bun",
       "args": ["run", "./gbrain/src/mcp/server.ts"],
       "env": {
-        "DATABASE_URL": "YOUR_CONNECTION_STRING",
-        "OPENAI_API_KEY": "YOUR_OPENAI_KEY"
+        "DATABASE_URL": "postgresql://aidx:aidx_secure_password@localhost:5432/aidx_brain",
+        "OPENAI_API_KEY": "sk-xxxxxxxx"
       }
     }
   }
 }
 ```
 
-### Step 7: ブレインリポジトリを初期化
+### Step 6: ブレインリポジトリを初期化
 
 ```bash
-# テンプレートからブレインを作成
 cp -r brain-template/ brain/
 cd brain
 git init
@@ -115,7 +123,7 @@ git add -A
 git commit -m "Initial brain setup"
 ```
 
-### Step 8: 動作確認
+### Step 7: 動作確認
 
 Claude Codeを起動して：
 
@@ -125,13 +133,27 @@ Claude Codeを起動して：
        担当は田中太郎社長。
 ```
 
-エージェントがGBrainに自動で保存します。次に：
+次に：
 
 ```
 社長 > 株式会社サンプルについて教えて
 ```
 
 保存した情報が返ってくれば成功です。
+
+---
+
+## なぜローカルPostgresなのか
+
+| | ローカルPostgres | クラウド（Supabase等） |
+|---|---|---|
+| **セキュリティ** | データは完全にPC内 | クラウドサーバーに保存 |
+| **検索速度** | 即レス（ネットワーク遅延ゼロ） | 数十msの遅延あり |
+| **コスト** | 無料 | $25/月〜 |
+| **データ量** | ディスク容量次第 | プランで上限あり |
+| **可用性** | PC起動中のみ | 24時間 |
+
+AIDXは「情報漏洩ゼロ」を掲げています。機密性の高い経営データをクラウドに出さないために、ローカルPostgresを標準構成としています。
 
 ---
 
@@ -151,55 +173,80 @@ Claude Codeを起動して：
 | `org/` | 経営方針・社内規程 | 全員 |
 | `inbox/` | 未整理の情報 | 秘書 |
 
+### ページの書き方（二層構造）
+
+#### 上半分：コンパイルされた真実（最新の状態）
+新しい情報が入ったら上書き更新。常に「今の正確な状態」を反映。
+
+#### 下半分：タイムライン（追記のみ）
+時系列で事実を記録。絶対に編集・削除しない。証拠の積み重ね。
+
 ---
 
-## GBrainの仕組み
+## データのバックアップ
 
-### 二層構造ページ
+ローカルPostgresのバックアップは定期的に行ってください。
 
-各ページは「上半分」と「下半分」に分かれます：
+```bash
+# バックアップ（週1回推奨）
+docker exec aidx-brain pg_dump -U aidx aidx_brain > backup_$(date +%Y%m%d).sql
 
-- **上半分（コンパイルされた真実）**: 最新の状態。新情報が入ったら上書き
-- **下半分（タイムライン）**: 時系列の事実記録。追記のみ、削除しない
+# 復元（必要な場合）
+docker exec -i aidx-brain psql -U aidx aidx_brain < backup_20260411.sql
+```
 
-### ハイブリッド検索
-
-- **キーワード検索**: 「田中社長」「NDA契約」等の固有名詞
-- **ベクトル検索**: 「最近の売上が好調な取引先」等の意味検索
-- 両方を組み合わせて最適な結果を返す
-
-### エージェントが自動でやること
-
-1. 会議後 → 関連する人・会社のページを自動更新
-2. 分析完了 → 結果をanalysesに保存、関連企業ページにリンク
-3. 契約レビュー → 要約をcontractsに保存、リスク項目をタイムラインに追記
+brainリポジトリはGit管理されているので、`git push` で社内Gitサーバーにもバックアップできます。
 
 ---
 
 ## トラブルシューティング
 
-### `gbrain init` でエラーが出る
+### Dockerが起動しない
+- Docker Desktopが起動しているか確認
+- Macの場合、システム設定 → プライバシーとセキュリティで許可が必要な場合あり
 
-- 接続文字列のパスワードが正しいか確認
-- Supabaseのプロジェクトが「Active」状態か確認
-- ポート番号が `6543`（Shared Pooler）になっているか確認
+### ポート5432が使用中
+```bash
+# 別のポートで起動
+docker run -d --name aidx-brain \
+  -e POSTGRES_USER=aidx \
+  -e POSTGRES_PASSWORD=aidx_secure_password \
+  -e POSTGRES_DB=aidx_brain \
+  -p 5433:5432 \
+  --restart unless-stopped \
+  pgvector/pgvector:pg16
+```
+接続文字列のポートも `5433` に変更してください。
 
 ### 検索結果が返らない
-
-- `gbrain sync` を実行してインデックスを更新
+- `bun run src/cli.ts sync` を実行してインデックスを更新
 - OpenAI APIキーが有効か確認
+- `docker ps` でPostgresコンテナが起動中か確認
 
-### Bunが見つからない
-
+### PCを再起動したらGBrainが動かない
 ```bash
-source ~/.bashrc  # または ~/.zshrc
-bun --version
+# Dockerコンテナの状態を確認
+docker ps -a
+
+# 停止していたら起動
+docker start aidx-brain
 ```
 
 ---
 
-## セキュリティに関する注意
+## エンタープライズ向け：社内サーバー構成
 
-- Supabaseのデータベースパスワードは厳重に管理してください
-- GBrainに保存されるデータはSupabaseの暗号化されたストレージに格納されます
-- オンプレミス要件がある場合は、ローカルPostgres + pgvectorでも動作可能です（`gbrain-local` MCP設定を使用）
+複数人で使う場合は、社内サーバーにPostgresを立てて共有できます。
+
+```
+┌──────────┐     ┌──────────┐     ┌───────────────┐
+│ 社長PC   │────>│          │     │               │
+│ (Claude) │     │  社内LAN │────>│ 社内サーバー    │
+│          │     │          │     │ Postgres+      │
+├──────────┤     │          │     │ pgvector       │
+│ 部長PC   │────>│          │     │               │
+│ (Claude) │     │          │     │ GBrain MCP     │
+└──────────┘     └──────────┘     └───────────────┘
+```
+
+この構成ではTier 3（エンタープライズ）プランで対応します。
