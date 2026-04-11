@@ -10,7 +10,22 @@
       "Bash(rm -rf .git/modules)",
       "Bash(rm -f .gitmodules)",
       "Bash(git add:*)",
-      "Bash(git commit -m ':*)"
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(ls -d /Users/shibayusuke/Recustep-AIDXplugin/skills/*/)",
+      "Bash(grep -E \"\\\\.\\(sh|ps1\\)$\")",
+      "Bash(wc -l /Users/shibayusuke/Recustep-AIDXplugin/contexts/*.md)",
+      "Bash(grep -r \"html\\\\|JSON\\\\|csv\\\\|export\\\\|generate\" /Users/shibayusuke/Recustep-AIDXplugin/skills/*/SKILL.md)",
+      "Bash(ls -la /Users/shibayusuke/Recustep-AIDXplugin/.claude*)",
+      "Bash(wc -l /Users/shibayusuke/Recustep-AIDXplugin/manifests/*.json)",
+      "Bash(pip3 install:*)",
+      "Bash(node tests/run-all.js)",
+      "Bash(npm test:*)",
+      "Bash(node scripts/ci/check-unicode-safety.js)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(node scripts/ci/check-unicode-safety.js --write)",
+      "Bash(node scripts/ci/validate-skills.js)",
+      "Bash(node scripts/ci/validate-rules.js)"
     ]
   }
 }

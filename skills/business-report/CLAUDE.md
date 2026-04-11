@@ -7,5 +7,5 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
-| #1710 | 1:45 PM | 🟣 | Created business report skill defining structure and standards for executive reporting | ~770 |
+| #1710 | 1:45 PM |  | Created business report skill defining structure and standards for executive reporting | ~770 |
 </claude-mem-context>

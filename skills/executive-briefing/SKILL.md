@@ -64,7 +64,7 @@ tools: Read, Write, Bash, Grep, Glob
 ### Phase 3: 診断結果の提示
 
 ```markdown
-## 📋 診断結果
+## 診断結果
 
 ### 御社の状態
 [1-2文で現状を端的に表現。数字を使う]
