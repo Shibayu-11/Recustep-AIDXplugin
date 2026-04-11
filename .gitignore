@@ -101,6 +101,12 @@ data/knowledge/
 venv/
 .venv/
 
+# GBrain（クローンされた参照用、サブモジュールではない）
+gbrain/
+
+# Brain（ユーザーのナレッジデータ）
+brain/
+
 # Bootstrap pipeline outputs
 # Generated lock files in tool subdirectories
 .opencode/package-lock.json
