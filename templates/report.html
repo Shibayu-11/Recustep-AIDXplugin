@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block header_type %}FINANCIAL REPORT{% endblock %}
+
+{% block content %}
+<h2 class="section-title">{{ report_title | default('財務レポート') }}</h2>
+
+{% if summary %}
+<div class="hbox">
+  <p><strong>エグゼクティブサマリー</strong></p>
+  <p>{{ summary }}</p>
+</div>
+{% endif %}
+
+{% if kpis %}
+<h2 class="section-title">KPI サマリー</h2>
+<table>
+  <thead>
+    <tr>
+      <th>指標</th>
+      <th>実績</th>
+      <th>予算</th>
+      <th>達成率</th>
+      <th>評価</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for kpi in kpis %}
+    <tr>
+      <td><strong>{{ kpi.name }}</strong></td>
+      <td>{{ kpi.actual }}</td>
+      <td>{{ kpi.budget }}</td>
+      <td>{{ kpi.rate }}</td>
+      <td><span class="tag {{ kpi.tag_class | default('') }}">{{ kpi.status }}</span></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if analysis %}
+<h2 class="section-title">分析詳細</h2>
+<div class="prose">{{ analysis }}</div>
+{% endif %}
+
+{% if actions %}
+<h2 class="section-title">推奨アクション</h2>
+<div class="prose">
+  <ul>
+    {% for action in actions %}
+    <li>{{ action }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if notes %}
+<div class="hbox" style="margin-top: 2rem;">
+  <p><strong>注記:</strong> {{ notes }}</p>
+</div>
+{% endif %}
+{% endblock %}

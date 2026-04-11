@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block header_type %}MINUTES{% endblock %}
+
+{% block content %}
+<h2 class="section-title">{{ meeting_title | default('議事録') }}</h2>
+
+<table>
+  <tbody>
+    <tr><td><strong>日時</strong></td><td>{{ datetime | default('') }}</td></tr>
+    <tr><td><strong>場所</strong></td><td>{{ location | default('') }}</td></tr>
+    <tr><td><strong>参加者</strong></td><td>{{ participants | default('') }}</td></tr>
+    <tr><td><strong>議題</strong></td><td>{{ agenda | default('') }}</td></tr>
+  </tbody>
+</table>
+
+{% if decisions %}
+<h2 class="section-title">決定事項</h2>
+<div class="prose">
+  <ol>
+    {% for decision in decisions %}
+    <li>{{ decision }}</li>
+    {% endfor %}
+  </ol>
+</div>
+{% endif %}
+
+{% if action_items %}
+<h2 class="section-title">アクションアイテム</h2>
+<table>
+  <thead>
+    <tr>
+      <th>担当</th>
+      <th>タスク</th>
+      <th>期限</th>
+      <th>状態</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in action_items %}
+    <tr>
+      <td><strong>{{ item.owner }}</strong></td>
+      <td>{{ item.task }}</td>
+      <td>{{ item.deadline }}</td>
+      <td><span class="tag {{ item.tag_class | default('') }}">{{ item.status | default('未着手') }}</span></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if discussion %}
+<h2 class="section-title">議論の要点</h2>
+<div class="prose">{{ discussion }}</div>
+{% endif %}
+
+{% if next_meeting %}
+<div class="hbox" style="margin-top: 2rem;">
+  <p><strong>次回予定:</strong> {{ next_meeting }}</p>
+</div>
+{% endif %}
+{% endblock %}
