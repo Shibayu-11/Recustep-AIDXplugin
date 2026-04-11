@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(git init:*)",
+      "Bash(git remote:*)",
+      "Bash(git fetch:*)",
+      "Bash(cp -r everything-claude-code/* everything-claude-code/.* .)",
+      "Bash(rm -rf everything-claude-code)",
+      "Bash(rm -rf .git/modules)",
+      "Bash(rm -f .gitmodules)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)"
+    ]
+  }
+}
