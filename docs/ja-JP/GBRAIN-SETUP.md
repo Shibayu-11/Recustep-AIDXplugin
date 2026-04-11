@@ -34,9 +34,9 @@ GBrainは、AIDXエージェントに「記憶」を与えるナレッジベー�
 
 ### Step 1: Dockerをインストール
 
-- Mac: https://docs.docker.com/desktop/install/mac-install/
-- Windows: https://docs.docker.com/desktop/install/windows-install/
-- Linux: https://docs.docker.com/engine/install/
+- Mac: <https://docs.docker.com/desktop/install/mac-install/>
+- Windows: <https://docs.docker.com/desktop/install/windows-install/>
+- Linux: <https://docs.docker.com/engine/install/>
 
 インストール後、Docker Desktopを起動してください。
 

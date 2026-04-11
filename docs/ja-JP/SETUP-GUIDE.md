@@ -10,13 +10,13 @@ AIツールの知識がなくても、この手順通りに進めれば5分で�
 | 項目 | 説明 | 入手方法 |
 |------|------|---------|
 | **PC** | Mac / Windows / Linux いずれか | — |
-| **Python 3.9以上** | プログラムの実行環境 | https://www.python.org/downloads/ |
-| **Git** | リポジトリのダウンロードに使用 | https://git-scm.com/downloads |
+| **Python 3.9以上** | プログラムの実行環境 | <https://www.python.org/downloads/> |
+| **Git** | リポジトリのダウンロードに使用 | <https://git-scm.com/downloads> |
 | **Anthropic APIキー** | AI（Claude）を動かすための鍵 | 下記「APIキーの取得方法」参照 |
 
 ### APIキーの取得方法
 
-1. https://console.anthropic.com/ にアクセス
+1. <https://console.anthropic.com/> にアクセス
 2. アカウントを作成（メールアドレスで登録）
 3. クレジットカードを登録してAPIプランに加入
 4. 「API Keys」ページで「Create Key」をクリック
@@ -148,7 +148,7 @@ python3 -m pip install -r requirements.txt
 
 問題が発生した場合は、Rikustepの担当者にお問い合わせください。
 
-- GitHub Issues: https://github.com/Shibayu-11/Recustep-AIDXplugin/issues
+- GitHub Issues: <https://github.com/Shibayu-11/Recustep-AIDXplugin/issues>
 
 ---
 

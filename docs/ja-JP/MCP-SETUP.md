@@ -15,7 +15,7 @@ AIDX用のMCP設定は `mcp-configs/aidx-business.json` にまとまっていま
 
 ### 1. Google Cloud Console でプロジェクトを作成
 
-1. https://console.cloud.google.com/ にアクセス
+1. <https://console.cloud.google.com/> にアクセス
 2. 「新しいプロジェクト」を作成
 3. プロジェクト名: `AIDX` など任意
 
@@ -85,7 +85,7 @@ GOOGLE_CLIENT_SECRET=あなたのクライアントシークレット
 
 ### 1. Slack Appを作成
 
-1. https://api.slack.com/apps にアクセス
+1. <https://api.slack.com/apps> にアクセス
 2. 「Create New App」→「From scratch」
 3. App Name: `AIDX Agent`、Workspace: 対象のワークスペースを選択
 
@@ -136,7 +136,7 @@ GOOGLE_CLIENT_SECRET=あなたのクライアントシークレット
 
 ### 1. APIトークンを取得
 
-1. https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php にアクセス
+1. <https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php> にアクセス
 2. APIトークンをコピー
 
 ### 2. ~/.claude.json に設定を追加
