@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIDX 使い方ガイド</title>
+<title>AIDX 完全セットアップガイド — ゼロから始める</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0a;
     --surface: #141414;
     --surface2: #1a1a1a;
-    --surface3: #222;
     --border: #2a2a2a;
     --white: #f0f0f0;
     --dim: #888;
@@ -19,9 +18,8 @@
     --accent-dim: rgba(0,229,160,0.08);
     --accent-glow: rgba(0,229,160,0.15);
     --blue: #4d9fff;
-    --yellow: #ffd666;
     --red: #ff5c5c;
-    --purple: #a78bfa;
+    --yellow: #ffd666;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -30,7 +28,7 @@
     color: var(--white);
     font-family: 'Noto Sans JP', 'Inter', sans-serif;
     font-weight: 400;
-    line-height: 1.8;
+    line-height: 1.9;
     -webkit-font-smoothing: antialiased;
   }
   a { color: var(--accent); text-decoration: none; }
@@ -43,53 +41,41 @@
     font-size: 0.85em;
     color: var(--accent);
   }
+  img { max-width: 100%; border-radius: 12px; border: 1px solid var(--border); }
 
   /* NAV */
   .nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background: rgba(10,10,10,0.85);
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(10,10,10,0.9);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     z-index: 100;
     padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
     height: 56px;
   }
-  .nav-logo {
-    font-weight: 800;
-    font-size: 0.95rem;
-    letter-spacing: -0.02em;
-  }
+  .nav-logo { font-weight: 800; font-size: 0.95rem; }
   .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2rem; }
-  .nav-links a {
-    font-size: 0.8rem;
-    color: var(--dim);
-    font-weight: 500;
-    transition: color 0.15s;
-  }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { font-size: 0.75rem; color: var(--dim); font-weight: 500; }
   .nav-links a:hover { color: var(--white); text-decoration: none; }
 
   /* HERO */
   .hero {
-    padding: 8rem 2rem 5rem;
+    padding: 8rem 2rem 4rem;
     text-align: center;
     position: relative;
   }
   .hero::before {
     content: '';
-    position: absolute;
-    top: 0; left: 50%;
+    position: absolute; top: 0; left: 50%;
     transform: translateX(-50%);
     width: 600px; height: 600px;
     background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
     pointer-events: none;
   }
   .hero h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 900;
     letter-spacing: -0.02em;
     margin-bottom: 1rem;
@@ -100,201 +86,150 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  .hero p { color: var(--dim); font-size: 1.05rem; max-width: 500px; margin: 0 auto; }
+  .hero p { color: var(--dim); font-size: 1rem; max-width: 500px; margin: 0 auto; }
 
   /* SECTION */
-  .section { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; }
+  .section { max-width: 750px; margin: 0 auto; padding: 4rem 2rem; }
   .section-label {
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 0.8rem;
+    font-size: 0.6rem; font-weight: 700; color: var(--accent);
+    letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.8rem;
   }
   .section-title {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 800;
-    margin-bottom: 0.8rem;
-    letter-spacing: -0.01em;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 800; margin-bottom: 0.6rem;
   }
-  .section-desc { color: var(--dim); font-size: 0.95rem; margin-bottom: 2.5rem; max-width: 600px; }
-  .divider { max-width: 800px; margin: 0 auto; height: 1px; background: var(--border); }
+  .section-desc { color: var(--dim); font-size: 0.92rem; margin-bottom: 2rem; }
+  .divider { max-width: 750px; margin: 0 auto; height: 1px; background: var(--border); }
 
-  /* STEPS */
-  .steps { display: flex; flex-direction: column; gap: 1.5rem; }
-  .step-card {
+  /* STEP */
+  .step {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 2rem;
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
+    margin-bottom: 1.5rem;
     transition: border-color 0.2s;
   }
-  .step-card:hover { border-color: var(--accent); }
+  .step:hover { border-color: var(--accent); }
+  .step-header {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+  }
   .step-num {
     font-family: 'Inter', sans-serif;
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--accent);
-    flex-shrink: 0;
-    width: 48px;
-    text-align: center;
-    line-height: 1;
-    padding-top: 0.2rem;
+    font-size: 1.5rem; font-weight: 900;
+    color: var(--accent); flex-shrink: 0;
+    width: 40px; text-align: center;
   }
-  .step-body h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
-  .step-body p { font-size: 0.88rem; color: var(--dim); line-height: 1.7; }
+  .step-header h3 { font-size: 1.05rem; font-weight: 700; }
+  .step p, .step li { font-size: 0.88rem; color: #bbb; line-height: 1.8; }
+  .step ol, .step ul { padding-left: 1.2rem; margin: 0.8rem 0; }
+  .step li { margin-bottom: 0.5rem; }
 
-  /* CODE BLOCK */
+  /* CODE */
   .code-block {
-    background: var(--surface);
+    background: var(--surface2);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     margin: 1rem 0;
   }
   .code-header {
-    background: var(--surface2);
-    padding: 0.5rem 1rem;
-    font-size: 0.65rem;
-    color: var(--dim2);
+    background: #111;
+    padding: 0.4rem 1rem;
+    font-size: 0.6rem; color: var(--dim2);
     font-family: 'JetBrains Mono', monospace;
     letter-spacing: 0.1em;
     border-bottom: 1px solid var(--border);
   }
   .code-body {
-    padding: 1rem 1.2rem;
+    padding: 0.8rem 1rem;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.82rem;
-    line-height: 1.8;
-    color: #ccc;
-    overflow-x: auto;
+    font-size: 0.8rem; line-height: 1.8;
+    color: #ccc; overflow-x: auto;
+    user-select: all;
   }
   .code-body .cmd { color: var(--accent); }
   .code-body .cmt { color: var(--dim2); }
-  .code-body .out { color: var(--yellow); }
 
-  /* FOLDER CARDS */
-  .folder-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    margin: 1.5rem 0;
-  }
-  .folder-card {
-    background: var(--surface);
-    padding: 1.8rem;
-  }
-  .folder-card.ok { border-top: 3px solid var(--accent); }
-  .folder-card.warn { border-top: 3px solid var(--red); }
-  .folder-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
-  .folder-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.3rem; }
-  .folder-path {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--accent);
-    margin-bottom: 0.6rem;
-  }
-  .folder-card p { font-size: 0.8rem; color: var(--dim); line-height: 1.6; }
-
-  /* AGENT CARDS */
-  .agent-list { display: flex; flex-direction: column; gap: 0.8rem; }
-  .agent-row {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.2rem 1.5rem;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    transition: border-color 0.2s;
-  }
-  .agent-row:hover { border-color: var(--accent); }
-  .agent-emoji { font-size: 1.5rem; flex-shrink: 0; }
-  .agent-info { flex: 1; }
-  .agent-info h4 { font-size: 0.9rem; font-weight: 700; }
-  .agent-info p { font-size: 0.78rem; color: var(--dim); }
-  .agent-example {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--accent);
-    background: var(--accent-dim);
-    padding: 0.3rem 0.8rem;
-    border-radius: 6px;
-    flex-shrink: 0;
-  }
-
-  /* TIPS */
+  /* TIP / WARN */
   .tip {
     background: var(--accent-dim);
     border: 1px solid rgba(0,229,160,0.2);
-    border-radius: 12px;
-    padding: 1.2rem 1.5rem;
-    margin: 1.5rem 0;
-    display: flex;
-    gap: 0.8rem;
-    align-items: flex-start;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: 0.85rem; color: #bbb;
   }
-  .tip-icon { font-size: 1.2rem; flex-shrink: 0; padding-top: 0.1rem; }
-  .tip p { font-size: 0.85rem; color: #bbb; line-height: 1.7; }
   .tip strong { color: var(--accent); }
-
-  .warn-box {
+  .warn {
     background: rgba(255,92,92,0.06);
-    border: 1px solid rgba(255,92,92,0.2);
-    border-radius: 12px;
-    padding: 1.2rem 1.5rem;
-    margin: 1.5rem 0;
+    border: 1px solid rgba(255,92,92,0.15);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: 0.85rem; color: #bbb;
   }
-  .warn-box p { font-size: 0.85rem; color: #bbb; line-height: 1.7; }
-  .warn-box strong { color: var(--red); }
+  .warn strong { color: var(--red); }
+
+  /* WHAT YOU CAN SAY */
+  .example-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.8rem; margin: 1.5rem 0;
+  }
+  .example {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+  }
+  .example-q {
+    font-size: 0.82rem; font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .example-a {
+    font-size: 0.72rem; color: var(--dim);
+  }
+
+  /* FOLDER */
+  .folder-list { margin: 1rem 0; }
+  .folder-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .folder-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem; color: var(--accent);
+    min-width: 150px;
+  }
+  .folder-desc { font-size: 0.8rem; color: var(--dim); }
 
   /* FAQ */
-  .faq-item {
-    border-bottom: 1px solid var(--border);
-    padding: 1.2rem 0;
-  }
-  .faq-q {
-    font-size: 0.95rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  .faq-a { font-size: 0.85rem; color: var(--dim); line-height: 1.7; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 1rem 0; }
+  .faq-q { font-size: 0.92rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .faq-a { font-size: 0.82rem; color: var(--dim); line-height: 1.7; }
 
-  /* FOOTER */
   .footer {
     border-top: 1px solid var(--border);
-    padding: 2rem;
-    text-align: center;
-    font-size: 0.7rem;
-    color: var(--dim2);
-    letter-spacing: 0.1em;
+    padding: 2rem; text-align: center;
+    font-size: 0.7rem; color: var(--dim2);
   }
 
   @media (max-width: 700px) {
     .nav-links { display: none; }
-    .folder-grid { grid-template-columns: 1fr; }
-    .agent-row { flex-direction: column; align-items: flex-start; }
-    .agent-example { align-self: flex-start; }
-    .step-card { flex-direction: column; }
+    .example-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">AIDX <span>Guide</span></div>
   <div class="nav-links">
-    <a href="#setup">セットアップ</a>
+    <a href="#prep">事前準備</a>
+    <a href="#install">インストール</a>
+    <a href="#start">起動</a>
     <a href="#usage">使い方</a>
-    <a href="#agents">AI部下</a>
     <a href="#folders">フォルダ</a>
     <a href="#faq">FAQ</a>
   </div>
@@ -302,246 +237,435 @@
 
 <!-- HERO -->
 <section class="hero">
-  <h1>AIDXの<span class="gr">使い方ガイド</span></h1>
-  <p>クローンして、起動して、話しかける。<br>それだけで5人のAI部下が動き出します。</p>
+  <h1><span class="gr">完全ガイド</span> — ゼロから始める</h1>
+  <p>パソコンが使えれば大丈夫。<br>1つずつ順番にやれば、誰でもAIDXが使えるようになります。</p>
 </section>
 
 <div class="divider"></div>
 
-<!-- SETUP -->
-<section class="section" id="setup">
-  <div class="section-label">Setup</div>
-  <h2 class="section-title">セットアップは2ステップ</h2>
-  <p class="section-desc">Claude Max プラン（$200/月・使い放題）に加入していれば、すぐ始められます。</p>
+<!-- ========== STEP 0: 全体像 ========== -->
+<section class="section">
+  <div class="section-label">Overview</div>
+  <h2 class="section-title">やることは全部で5つ</h2>
+  <p class="section-desc">上から順番にやってください。全部で30分〜1時間で終わります。</p>
 
-  <div class="steps">
-    <div class="step-card">
-      <div class="step-num">1</div>
-      <div class="step-body">
-        <h3>リポジトリをダウンロード</h3>
-        <p>ターミナルを開いて以下をコピー&ペースト</p>
-        <div class="code-block">
-          <div class="code-header">TERMINAL</div>
-          <div class="code-body">
+  <div class="step">
+    <p>
+      <strong>1.</strong> Anthropic（AI会社）のアカウントを作る<br>
+      <strong>2.</strong> VS Code（エディタ）をインストールする<br>
+      <strong>3.</strong> Claude Code（AIツール）をインストールする<br>
+      <strong>4.</strong> AIDXをダウンロードする<br>
+      <strong>5.</strong> 起動して話しかける
+    </p>
+  </div>
+
+  <div class="tip">
+    <strong>Recustepがセットアップ代行する場合:</strong> この手順はRecustepの担当者が全てやります。あなたはStep 1（アカウント作成）だけやれば大丈夫です。
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== STEP 1: Anthropic ========== -->
+<section class="section" id="prep">
+  <div class="section-label">Step 1</div>
+  <h2 class="section-title">Anthropicのアカウントを作る</h2>
+  <p class="section-desc">AIDXの頭脳となるAI（Claude）を使うためのアカウントです。</p>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">1-1</div>
+      <h3>claude.ai にアクセス</h3>
+    </div>
+    <p>ブラウザ（Chrome、Safari等）で以下を開いてください：</p>
+    <div class="code-block">
+      <div class="code-header">ブラウザのアドレスバーに入力</div>
+      <div class="code-body">https://claude.ai/</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">1-2</div>
+      <h3>アカウントを作成</h3>
+    </div>
+    <ol>
+      <li>「Sign Up」をクリック</li>
+      <li>メールアドレスを入力（Googleアカウントでもログインできます）</li>
+      <li>届いた確認メールのリンクをクリック</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">1-3</div>
+      <h3>Maxプランに加入</h3>
+    </div>
+    <ol>
+      <li>ログイン後、画面の「Upgrade」ボタンをクリック</li>
+      <li>「Max」プランを選択（$200/月 — 使い放題）</li>
+      <li>クレジットカード情報を入力して完了</li>
+    </ol>
+    <div class="tip">
+      <strong>なぜMaxプラン？</strong> 月額固定で使い放題です。従量課金（使った分だけ請求）と違い、「今月いくらかかるか分からない」という心配がありません。月約3万円で5人のAI部下が使い放題です。
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== STEP 2: VS Code ========== -->
+<section class="section">
+  <div class="section-label">Step 2</div>
+  <h2 class="section-title">VS Codeをインストール</h2>
+  <p class="section-desc">VS Code（ブイエスコード）はMicrosoftが無料で提供しているエディタです。AIDXはこの中で動きます。</p>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">2-1</div>
+      <h3>VS Codeをダウンロード</h3>
+    </div>
+    <p>以下のページを開いて、あなたのパソコンに合ったものをダウンロード：</p>
+    <div class="code-block">
+      <div class="code-header">ブラウザで開く</div>
+      <div class="code-body">https://code.visualstudio.com/</div>
+    </div>
+    <ul>
+      <li><strong>Mac</strong> → 「Download for Mac」をクリック</li>
+      <li><strong>Windows</strong> → 「Download for Windows」をクリック</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">2-2</div>
+      <h3>インストール</h3>
+    </div>
+    <ul>
+      <li><strong>Mac:</strong> ダウンロードした .zip を開く → 「Visual Studio Code」をアプリケーションフォルダにドラッグ</li>
+      <li><strong>Windows:</strong> ダウンロードした .exe をダブルクリック → 「次へ」を押していくだけ</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">2-3</div>
+      <h3>VS Codeを開く</h3>
+    </div>
+    <p>アプリケーション一覧から「Visual Studio Code」を開いてください。青いアイコンが目印です。</p>
+    <p>英語の画面が出ますが、問題ありません。このまま進めます。</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== STEP 3: Node.js + Claude Code ========== -->
+<section class="section">
+  <div class="section-label">Step 3</div>
+  <h2 class="section-title">Claude Codeをインストール</h2>
+  <p class="section-desc">Claude CodeはAIとやり取りするためのツールです。まず、その土台となるNode.jsを入れます。</p>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3-1</div>
+      <h3>Node.jsをインストール</h3>
+    </div>
+    <p>以下のページを開いてダウンロード：</p>
+    <div class="code-block">
+      <div class="code-header">ブラウザで開く</div>
+      <div class="code-body">https://nodejs.org/</div>
+    </div>
+    <p>「LTS」と書かれた緑色のボタンをクリックしてダウンロード。ダウンロードしたファイルをダブルクリックしてインストール（全て「次へ」でOK）。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3-2</div>
+      <h3>ターミナルを開く</h3>
+    </div>
+    <p>ターミナルとは、パソコンに文字で命令を出す画面です。</p>
+    <ul>
+      <li><strong>Mac:</strong> VS Codeの上メニュー →「Terminal」→「New Terminal」<br>
+        または、Macの「アプリケーション」→「ユーティリティ」→「ターミナル」</li>
+      <li><strong>Windows:</strong> VS Codeの上メニュー →「Terminal」→「New Terminal」<br>
+        または、スタートメニューで「PowerShell」を検索して開く</li>
+    </ul>
+    <p>黒い画面（またはVS Codeの下部パネル）にカーソルが点滅していればOKです。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3-3</div>
+      <h3>Claude Codeをインストール</h3>
+    </div>
+    <p>ターミナルに以下をコピー&ペーストして、Enterキーを押してください：</p>
+    <div class="code-block">
+      <div class="code-header">ターミナルにコピー&ペースト</div>
+      <div class="code-body"><span class="cmd">npm install -g @anthropic-ai/claude-code</span></div>
+    </div>
+    <p>数十秒待って、エラーが出なければ完了です。</p>
+    <div class="warn">
+      <strong>エラーが出た場合（Mac）:</strong> 先頭に <code>sudo</code> を付けて再実行してください：<br>
+      <code>sudo npm install -g @anthropic-ai/claude-code</code><br>
+      パスワードを聞かれたら、Macのログインパスワードを入力（画面には表示されません）。
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3-4</div>
+      <h3>Gitをインストール（まだ入ってない場合）</h3>
+    </div>
+    <p>ターミナルで以下を試してください：</p>
+    <div class="code-block">
+      <div class="code-header">ターミナル</div>
+      <div class="code-body"><span class="cmd">git --version</span></div>
+    </div>
+    <p>バージョンが表示されればOK。「command not found」と出たら：</p>
+    <ul>
+      <li><strong>Mac:</strong> ターミナルで <code>xcode-select --install</code> を実行 →「インストール」をクリック</li>
+      <li><strong>Windows:</strong> <a href="https://git-scm.com/downloads" target="_blank">https://git-scm.com/downloads</a> からダウンロードしてインストール</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== STEP 4: AIDX ========== -->
+<section class="section" id="install">
+  <div class="section-label">Step 4</div>
+  <h2 class="section-title">AIDXをダウンロード</h2>
+  <p class="section-desc">ターミナルにコマンドを2つ入れるだけです。</p>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">4-1</div>
+      <h3>ダウンロード</h3>
+    </div>
+    <p>ターミナルに以下をコピー&ペーストして、Enterキーを押してください：</p>
+    <div class="code-block">
+      <div class="code-header">ターミナルにコピー&ペースト</div>
+      <div class="code-body">
 <span class="cmd">git clone</span> https://github.com/Shibayu-11/Recustep-AIDXplugin.git
 <span class="cmd">cd</span> Recustep-AIDXplugin
-          </div>
-        </div>
       </div>
     </div>
-
-    <div class="step-card">
-      <div class="step-num">2</div>
-      <div class="step-body">
-        <h3>Claude Codeを起動</h3>
-        <p>同じターミナルでこれだけ</p>
-        <div class="code-block">
-          <div class="code-header">TERMINAL</div>
-          <div class="code-body">
-<span class="cmd">claude</span>
-          </div>
-        </div>
-        <p style="margin-top:0.8rem;">初回はAnthropicアカウントでログインを求められます。完了すれば即座にAI部下が稼働します。</p>
-      </div>
-    </div>
+    <p>数秒でダウンロードが完了します。</p>
   </div>
 
-  <div class="tip">
-    <div class="tip-icon">i</div>
-    <p><strong>Claude Codeが入ってない場合:</strong> <code>npm install -g @anthropic-ai/claude-code</code> で先にインストールしてください。Node.jsが必要です。</p>
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">4-2</div>
+      <h3>VS Codeでフォルダを開く</h3>
+    </div>
+    <p>VS Codeの上メニュー →「File」→「Open Folder」→ ダウンロードした「Recustep-AIDXplugin」フォルダを選択して「開く」をクリック。</p>
+    <p>左側にファイル一覧が表示されればOKです。</p>
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- USAGE -->
+<!-- ========== STEP 5: 起動 ========== -->
+<section class="section" id="start">
+  <div class="section-label">Step 5</div>
+  <h2 class="section-title">起動する</h2>
+  <p class="section-desc">たった1コマンドです。</p>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">5-1</div>
+      <h3>Claude Codeを起動</h3>
+    </div>
+    <p>VS Code内のターミナルに以下を入力してEnter：</p>
+    <div class="code-block">
+      <div class="code-header">ターミナル</div>
+      <div class="code-body"><span class="cmd">claude</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">5-2</div>
+      <h3>ログイン</h3>
+    </div>
+    <p>初回のみ、ブラウザが開いてAnthropicアカウントでのログインを求められます。</p>
+    <ol>
+      <li>ブラウザでAnthropicにログイン</li>
+      <li>「許可」をクリック</li>
+      <li>ターミナルに戻ると、AIDXが使える状態になっています</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">5-3</div>
+      <h3>話しかける</h3>
+    </div>
+    <p>ターミナルに <code>&gt;</code> マークが表示されたら準備完了。日本語で何でも聞いてください。</p>
+    <div class="code-block">
+      <div class="code-header">AIDXに話しかける</div>
+      <div class="code-body">
+<span class="cmt">&gt;</span> 今月の売上を分析して
+      </div>
+    </div>
+    <div class="tip">
+      <strong>おめでとうございます！</strong> これでAIDXの5人のAI部下が使えるようになりました。
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== 使い方 ========== -->
 <section class="section" id="usage">
   <div class="section-label">Usage</div>
-  <h2 class="section-title">日本語で話しかけるだけ</h2>
-  <p class="section-desc">特別なコマンドは不要。普通の日本語で指示すれば、最適なAI部下が自動で対応します。</p>
+  <h2 class="section-title">こう話しかけてください</h2>
+  <p class="section-desc">特別なコマンドは不要。普通の日本語でOKです。</p>
+
+  <div class="example-grid">
+    <div class="example">
+      <div class="example-q">"今月の売上を分析して"</div>
+      <div class="example-a">→ 財務エージェントが自動で対応</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"この契約書のリスクを教えて"</div>
+      <div class="example-a">→ 法務エージェントが条項をチェック</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"残業が多い社員いない？"</div>
+      <div class="example-a">→ 労務エージェントが36協定をチェック</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"議事録を作って"</div>
+      <div class="example-a">→ 秘書エージェントが整形して出力</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"SWOT分析して"</div>
+      <div class="example-a">→ 戦略エージェントがフレームワーク分析</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"使える補助金ある？"</div>
+      <div class="example-a">→ 最新の公募状況を検索して診断</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"田中さんに来週金曜までに見積書作ってもらう"</div>
+      <div class="example-a">→ タスクに自動登録、期限管理</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"今日のブリーフィング"</div>
+      <div class="example-a">→ タスク+リマインダー+優先度をまとめて報告</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"3日後にリマインドして: A社フォロー"</div>
+      <div class="example-a">→ 3日後のブリーフィングで通知</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"NDAのたたき台作って"</div>
+      <div class="example-a">→ 秘密保持契約書の雛形を生成</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"年収500万で1人採用したら実際いくら？"</div>
+      <div class="example-a">→ 社保込み総人件費を1円単位で計算</div>
+    </div>
+    <div class="example">
+      <div class="example-q">"この契約、結んでいいか迷ってる"</div>
+      <div class="example-a">→ 深層レビュー（立場整理+リスク金額換算+交渉戦略）</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1rem; font-weight:700; margin: 2rem 0 1rem;">データを分析させるには</h3>
+
+  <div class="step">
+    <p><strong>1.</strong> VS Codeの左側で <code>data/financial/</code> フォルダを見つける<br>
+       <strong>2.</strong> そこにExcelファイルをドラッグ&ドロップ<br>
+       <strong>3.</strong> ターミナルで「data/financial/売上表.xlsx を分析して」と話しかける</p>
+    <p>契約書PDFも同じ要領で <code>data/contracts/</code> に入れるだけです。</p>
+  </div>
+
+  <h3 style="font-size:1rem; font-weight:700; margin: 2rem 0 1rem;">終了するには</h3>
 
   <div class="code-block">
-    <div class="code-header">CLAUDE CODE</div>
-    <div class="code-body">
-<span class="cmt"># 財務分析</span>
-<span class="out">&gt;</span> 今月の売上を分析して
-
-<span class="cmt"># 契約書チェック</span>
-<span class="out">&gt;</span> data/contracts/業務委託契約書.pdf のリスクを教えて
-
-<span class="cmt"># 議事録作成</span>
-<span class="out">&gt;</span> 今日の会議の議事録を作って。参加者は田中、佐藤、鈴木。
-
-<span class="cmt"># 戦略分析</span>
-<span class="out">&gt;</span> うちの会社のSWOT分析をして
-
-<span class="cmt"># 補助金診断</span>
-<span class="out">&gt;</span> うちが使える補助金ある？製造業、従業員50人
-
-<span class="cmt"># 見積書作成</span>
-<span class="out">&gt;</span> A社向けにコンサル費用の見積書を作って
-    </div>
+    <div class="code-header">ターミナル</div>
+    <div class="code-body"><span class="cmt">&gt;</span> /exit</div>
   </div>
-
-  <h3 style="font-size:1rem; font-weight:700; margin: 2.5rem 0 1rem;">データを分析させるには</h3>
-
-  <div class="steps">
-    <div class="step-card">
-      <div class="step-num">1</div>
-      <div class="step-body">
-        <h3>ファイルを置く</h3>
-        <p>Excelは <code>data/financial/</code> に、契約書PDFは <code>data/contracts/</code> にドラッグ&ドロップ</p>
-      </div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">2</div>
-      <div class="step-body">
-        <h3>話しかける</h3>
-        <p>「data/financial/売上表.xlsx を分析して」と入力するだけ</p>
-      </div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">3</div>
-      <div class="step-body">
-        <h3>結果を受け取る</h3>
-        <p>AIが自動でグラフ・表・推奨アクション付きのレポートを生成します</p>
-      </div>
-    </div>
-  </div>
+  <p style="font-size:0.85rem; color:var(--dim);">または <code>Ctrl + C</code> を押してください。</p>
 </section>
 
 <div class="divider"></div>
 
-<!-- AGENTS -->
-<section class="section" id="agents">
-  <div class="section-label">AI Team</div>
-  <h2 class="section-title">5人のAI部下</h2>
-  <p class="section-desc">あなたの指示を聞いて、最適な専門家が自動で対応します。</p>
-
-  <div class="agent-list">
-    <div class="agent-row">
-      <div class="agent-emoji">F</div>
-      <div class="agent-info">
-        <h4>財務エージェント</h4>
-        <p>PL/BS/CF分析、KPIモニタリング、資金繰り予測、見積書・請求書作成</p>
-      </div>
-      <div class="agent-example">"売上を分析して"</div>
-    </div>
-    <div class="agent-row">
-      <div class="agent-emoji">L</div>
-      <div class="agent-info">
-        <h4>法務エージェント</h4>
-        <p>契約書リスク分析、コンプライアンスチェック、NDA雛形作成</p>
-      </div>
-      <div class="agent-example">"契約書をチェックして"</div>
-    </div>
-    <div class="agent-row">
-      <div class="agent-emoji">H</div>
-      <div class="agent-info">
-        <h4>労務エージェント</h4>
-        <p>就業規則Q&A、残業管理、採用・評価制度設計、事業承継</p>
-      </div>
-      <div class="agent-example">"残業が多い部署は？"</div>
-    </div>
-    <div class="agent-row">
-      <div class="agent-emoji">S</div>
-      <div class="agent-info">
-        <h4>秘書エージェント</h4>
-        <p>議事録作成、メール・提案書・報告書作成、月次レポート</p>
-      </div>
-      <div class="agent-example">"議事録を作って"</div>
-    </div>
-    <div class="agent-row">
-      <div class="agent-emoji">X</div>
-      <div class="agent-info">
-        <h4>戦略エージェント</h4>
-        <p>SWOT/3C/PEST分析、事業計画、競合調査、補助金診断</p>
-      </div>
-      <div class="agent-example">"SWOT分析して"</div>
-    </div>
-  </div>
-
-  <div class="tip">
-    <div class="tip-icon">i</div>
-    <p><strong>複数の領域にまたがる質問もOK。</strong>「銀行融資の準備をしたいんだけど、契約書のチェックもお願い」→ 財務エージェントと法務エージェントが連携して対応します。</p>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- FOLDERS -->
+<!-- ========== フォルダ ========== -->
 <section class="section" id="folders">
   <div class="section-label">Folders</div>
-  <h2 class="section-title">触っていいのは3つだけ</h2>
-  <p class="section-desc">フォルダがたくさんありますが、あなたが使うのはこれだけ。他は全部システムが使います。</p>
+  <h2 class="section-title">触っていいフォルダは3つだけ</h2>
+  <p class="section-desc">VS Codeの左側にフォルダがたくさん並んでいますが、あなたが使うのはこれだけ。</p>
 
-  <div class="folder-grid">
-    <div class="folder-card ok">
-      <div class="folder-icon">F</div>
-      <h3>財務データ</h3>
-      <div class="folder-path">data/financial/</div>
-      <p>Excel、CSVを置くだけ。置いたら「分析して」と言うだけ。</p>
+  <div class="folder-list">
+    <div class="folder-item">
+      <div class="folder-name">data/financial/</div>
+      <div class="folder-desc">売上データ（Excel、CSV）を入れる場所。入れたら「分析して」と言うだけ</div>
     </div>
-    <div class="folder-card ok">
-      <div class="folder-icon">C</div>
-      <h3>契約書</h3>
-      <div class="folder-path">data/contracts/</div>
-      <p>契約書PDFを置くだけ。「チェックして」でリスク分析が走る。</p>
+    <div class="folder-item">
+      <div class="folder-name">data/contracts/</div>
+      <div class="folder-desc">契約書（PDF）を入れる場所。入れたら「チェックして」と言うだけ</div>
     </div>
-    <div class="folder-card ok">
-      <div class="folder-icon">K</div>
-      <h3>社内資料</h3>
-      <div class="folder-path">data/knowledge/</div>
-      <p>マニュアル、規程、ルールを置くとAIが記憶して活用する。</p>
+    <div class="folder-item">
+      <div class="folder-name">data/knowledge/</div>
+      <div class="folder-desc">社内マニュアル・規程を入れる場所。AIが記憶して活用します</div>
     </div>
   </div>
 
-  <div class="warn-box">
-    <p><strong>上記以外のフォルダは触らないでください。</strong>
-    aidx_agents/、tools/、templates/、skills/ 等はシステム内部です。
-    変更するとAIが正常に動かなくなる可能性があります。
-    設定変更が必要な場合はRecustepにご相談ください。</p>
+  <div class="warn">
+    <strong>上記以外のフォルダは触らないでください。</strong>
+    システムの内部ファイルです。変更するとAIDXが正常に動かなくなります。
+    設定変更が必要な場合はRecustepにご連絡ください。
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- FAQ -->
+<!-- ========== FAQ ========== -->
 <section class="section" id="faq">
   <div class="section-label">FAQ</div>
   <h2 class="section-title">よくある質問</h2>
 
   <div class="faq-item">
-    <div class="faq-q">claude コマンドが見つからない</div>
-    <div class="faq-a"><code>npm install -g @anthropic-ai/claude-code</code> を実行してください。Node.jsが未インストールの場合は先にNode.jsを入れてください。</div>
+    <div class="faq-q">「claude」と入力しても何も起きない</div>
+    <div class="faq-a">Claude Codeがインストールされていない可能性があります。ターミナルで <code>npm install -g @anthropic-ai/claude-code</code> を実行してください。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">「npm」と入力してもエラーが出る</div>
+    <div class="faq-a">Node.jsがインストールされていません。Step 3-1 に戻って Node.js をインストールしてください。インストール後、ターミナルを一度閉じて開き直してください。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">「git」と入力してもエラーが出る</div>
+    <div class="faq-a">Gitがインストールされていません。Step 3-4 に戻ってインストールしてください。</div>
   </div>
   <div class="faq-item">
     <div class="faq-q">ログインできない</div>
-    <div class="faq-a">Anthropicアカウントが Max プラン（$100 or $200）であることを確認してください。無料プランではClaude Codeは使えません。</div>
+    <div class="faq-a">Anthropicアカウントが Max プランであることを確認してください。無料プランや Pro プランでは Claude Code は使えません。</div>
   </div>
   <div class="faq-item">
     <div class="faq-q">応答が遅い / エラーが出る</div>
-    <div class="faq-a">Anthropicのサービス状況（status.anthropic.com）を確認してください。一時的な障害の場合があります。</div>
+    <div class="faq-a">Anthropicのサービス状況（status.anthropic.com）を確認してください。一時的な障害の可能性があります。しばらく待ってから再度お試しください。</div>
   </div>
   <div class="faq-item">
     <div class="faq-q">Windowsで動く？</div>
-    <div class="faq-a">はい。PowerShellから同じ手順で使えます。パスに日本語が含まれるとエラーになる場合があるので、英数字のみのフォルダに配置してください。</div>
+    <div class="faq-a">はい。上記の手順はMacでもWindowsでも同じです。PowerShellから同じコマンドが使えます。</div>
   </div>
   <div class="faq-item">
-    <div class="faq-q">データは外部に送信される？</div>
-    <div class="faq-a">質問文のみがClaude AIに送信されます。Excel、PDF等の生データは送信されず、ローカルで処理されます。APIキーや機密データがGitにコミットされることもありません。</div>
+    <div class="faq-q">データは外部に送られる？</div>
+    <div class="faq-a">質問文のみがAIに送信されます。Excel・PDF等の生データはあなたのパソコンの中で処理され、外部に送信されません。</div>
   </div>
   <div class="faq-item">
     <div class="faq-q">月額料金は？</div>
-    <div class="faq-a">Claude Max プラン $200/月（約3万円）のみ。使い放題で従量課金の心配はありません。Recustepの導入サポートは別途月額7万円です。</div>
+    <div class="faq-a">Claude Max プラン $200/月（約3万円）のみ。使い放題で追加料金はかかりません。Recustepの導入サポートは別途月額7万円です。</div>
   </div>
   <div class="faq-item">
-    <div class="faq-q">何か壊れた / 設定を変えたい</div>
-    <div class="faq-a">Recustepの担当者にご連絡ください。CLAUDE.mdの変更で対応します。ご自身でシステムフォルダを編集しないでください。</div>
+    <div class="faq-q">何か壊れた / よく分からない</div>
+    <div class="faq-a">Recustepの担当者にご連絡ください。リモートで対応いたします。</div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <div class="footer">
   AIDX Management Agent System — Powered by Recustep
 </div>
