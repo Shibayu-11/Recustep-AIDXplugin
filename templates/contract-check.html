@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block header_type %}CONTRACT REVIEW{% endblock %}
+
+{% block extra_styles %}
+.risk-high { border-left: 4px solid var(--red); background: #fff0f0; padding: 1rem 1.5rem; margin: 1rem 0; }
+.risk-mid { border-left: 4px solid #ffaa00; background: #fffce8; padding: 1rem 1.5rem; margin: 1rem 0; }
+.risk-low { border-left: 4px solid var(--green); background: #f0fff4; padding: 1rem 1.5rem; margin: 1rem 0; }
+.risk-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; font-weight: 700; }
+.risk-label-high { color: #cc0000; }
+.risk-label-mid { color: #aa7700; }
+.risk-label-low { color: #227722; }
+{% endblock %}
+
+{% block content %}
+<h2 class="section-title">{{ contract_title | default('契約書レビュー結果') }}</h2>
+
+<table>
+  <tbody>
+    <tr><td><strong>対象文書</strong></td><td>{{ document_name | default('') }}</td></tr>
+    <tr><td><strong>ページ数</strong></td><td>{{ page_count | default('') }}</td></tr>
+    <tr><td><strong>レビュー日</strong></td><td>{{ review_date | default('') }}</td></tr>
+    <tr><td><strong>総合リスク</strong></td><td><span class="tag {{ overall_risk_class | default('') }}">{{ overall_risk | default('') }}</span></td></tr>
+  </tbody>
+</table>
+
+{% if overview %}
+<div class="hbox">
+  <p><strong>概要</strong></p>
+  <p>{{ overview }}</p>
+</div>
+{% endif %}
+
+{% if high_risks %}
+<h2 class="section-title">🔴 高リスク事項</h2>
+{% for risk in high_risks %}
+<div class="risk-high">
+  <div class="risk-label risk-label-high">HIGH RISK — {{ risk.clause | default('') }}</div>
+  <p class="prose" style="margin-top:0.5rem;">{{ risk.description }}</p>
+  {% if risk.recommendation %}
+  <p class="prose"><strong>推奨対応:</strong> {{ risk.recommendation }}</p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if medium_risks %}
+<h2 class="section-title">🟡 中リスク事項</h2>
+{% for risk in medium_risks %}
+<div class="risk-mid">
+  <div class="risk-label risk-label-mid">MEDIUM RISK — {{ risk.clause | default('') }}</div>
+  <p class="prose" style="margin-top:0.5rem;">{{ risk.description }}</p>
+  {% if risk.recommendation %}
+  <p class="prose"><strong>推奨対応:</strong> {{ risk.recommendation }}</p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if low_risks %}
+<h2 class="section-title">🟢 低リスク / 確認事項</h2>
+{% for risk in low_risks %}
+<div class="risk-low">
+  <div class="risk-label risk-label-low">LOW RISK — {{ risk.clause | default('') }}</div>
+  <p class="prose" style="margin-top:0.5rem;">{{ risk.description }}</p>
+</div>
+{% endfor %}
+{% endif %}
+
+{% if lawyer_items %}
+<h2 class="section-title">弁護士に確認すべき事項</h2>
+<div class="prose">
+  <ul>
+    {% for item in lawyer_items %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="hbox" style="margin-top: 2rem;">
+  <p><strong>免責事項:</strong> 本レビューは参考情報であり、法的助言ではありません。最終判断は必ず弁護士にご確認ください。</p>
+</div>
+{% endblock %}

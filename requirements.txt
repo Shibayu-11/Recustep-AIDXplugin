@@ -1,0 +1,17 @@
+# AIDX経営エージェントシステム - Python依存パッケージ
+
+# コア
+anthropic>=0.40.0       # Anthropic SDK（Claude API）
+python-dotenv>=1.0.0    # .env読み込み
+
+# データ処理
+openpyxl>=3.1.0         # Excel読み書き（結合セル対応）
+pandas>=2.0.0           # データ分析
+opendataloader-pdf>=1.8.0  # PDF解析（ベンチマーク1位、テーブル・OCR・複雑レイアウト対応）※Java 11+必要
+pdfplumber>=0.11.0      # PDF解析フォールバック（Java不要環境用）
+
+# 出力
+jinja2>=3.1.0           # HTMLテンプレートレンダリング
+
+# CLI
+rich>=13.0.0            # リッチなターミナル出力

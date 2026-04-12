@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title | default('AIDX レポート') }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --black: #111;
+    --accent: #1a1a2e;
+    --lime: #c8ff00;
+    --orange: #ff4d00;
+    --gray: #e8e5df;
+    --gray2: #d5d2cc;
+    --muted: #888;
+    --white: #fff;
+    --red: #ff4d4d;
+    --green: #4dff88;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--black);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+  }
+  .header {
+    background: var(--black);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+  .header-title .accent { color: var(--lime); }
+  .header-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-align: right;
+    line-height: 2;
+  }
+  .doc { max-width: 860px; margin: 0 auto; padding: 3rem; }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    border-bottom: 2px solid var(--black);
+    padding-bottom: 0.5rem;
+    margin: 2rem 0 1rem;
+  }
+  .prose { font-size: 0.95rem; line-height: 1.9; color: #333; margin-bottom: 1.5rem; }
+  .prose strong { color: var(--black); font-weight: 700; }
+  .hbox {
+    background: var(--black);
+    color: var(--white);
+    padding: 1.5rem 2rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid var(--lime);
+  }
+  .hbox p { font-size: 0.95rem; line-height: 1.8; color: #ccc; }
+  .hbox strong { color: var(--lime); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.85rem;
+  }
+  th {
+    background: var(--black);
+    color: var(--white);
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    font-weight: 400;
+  }
+  td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--gray);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--gray); }
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    padding: 0.15rem 0.5rem;
+    letter-spacing: 0.1em;
+  }
+  .tag-good { background: #e8ffe8; color: #2a7a2a; }
+  .tag-warn { background: #fff8e0; color: #9a7a00; }
+  .tag-bad { background: #ffe8e8; color: #aa2222; }
+  .footer {
+    background: var(--black);
+    color: #555;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+  }
+  .footer span { color: var(--lime); }
+  @media print {
+    .header, .footer { break-inside: avoid; }
+    body { font-size: 12pt; }
+  }
+  @media (max-width: 700px) {
+    .doc { padding: 1.5rem; }
+    .header { padding: 1.5rem; flex-direction: column; gap: 1rem; }
+  }
+  {% block extra_styles %}{% endblock %}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">AIDX <span class="accent">{% block header_type %}REPORT{% endblock %}</span></div>
+  <div class="header-meta">
+    <div>{{ date | default('') }}</div>
+    <div>POWERED BY RIKUSTEP × CLAUDE API</div>
+  </div>
+</div>
+
+<div class="doc">
+  {% block content %}{% endblock %}
+</div>
+
+<div class="footer">
+  <div>AIDX MANAGEMENT AGENT / <span>{{ title | default('REPORT') }}</span></div>
+  <div>CONFIDENTIAL</div>
+</div>
+
+</body>
+</html>

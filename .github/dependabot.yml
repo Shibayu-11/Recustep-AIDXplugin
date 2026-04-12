@@ -1,0 +1,5 @@
+# Dependabot無効化
+# AIDXはPython主体のプロジェクト。ECCのnpm依存の自動更新は不要。
+# 必要な更新はRecustepが手動で行う。
+version: 2
+updates: []

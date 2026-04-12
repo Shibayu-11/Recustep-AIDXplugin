@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block header_type %}PROPOSAL{% endblock %}
+
+{% block content %}
+<h2 class="section-title">{{ proposal_title | default('提案書') }}</h2>
+
+{% if executive_summary %}
+<div class="hbox">
+  <p><strong>エグゼクティブサマリー</strong></p>
+  <p>{{ executive_summary }}</p>
+</div>
+{% endif %}
+
+{% if background %}
+<h2 class="section-title">背景・課題</h2>
+<div class="prose">{{ background }}</div>
+{% endif %}
+
+{% if proposal_content %}
+<h2 class="section-title">提案内容</h2>
+<div class="prose">{{ proposal_content }}</div>
+{% endif %}
+
+{% if expected_effects %}
+<h2 class="section-title">期待効果</h2>
+<table>
+  <thead>
+    <tr>
+      <th>効果</th>
+      <th>内容</th>
+      <th>見込み</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for effect in expected_effects %}
+    <tr>
+      <td><strong>{{ effect.category }}</strong></td>
+      <td>{{ effect.description }}</td>
+      <td>{{ effect.estimate }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if schedule %}
+<h2 class="section-title">スケジュール</h2>
+<table>
+  <thead>
+    <tr>
+      <th>フェーズ</th>
+      <th>期間</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for phase in schedule %}
+    <tr>
+      <td><strong>{{ phase.name }}</strong></td>
+      <td>{{ phase.period }}</td>
+      <td>{{ phase.description }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if budget %}
+<h2 class="section-title">予算</h2>
+<div class="prose">{{ budget }}</div>
+{% endif %}
+
+{% if risks %}
+<h2 class="section-title">リスクと対策</h2>
+<table>
+  <thead>
+    <tr>
+      <th>リスク</th>
+      <th>影響度</th>
+      <th>対策</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for risk in risks %}
+    <tr>
+      <td>{{ risk.description }}</td>
+      <td><span class="tag {{ risk.tag_class | default('') }}">{{ risk.level }}</span></td>
+      <td>{{ risk.mitigation }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}
