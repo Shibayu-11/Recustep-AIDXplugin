@@ -116,13 +116,21 @@ data/
 
 ## 内蔵リソース
 
-Claude Code利用時には access to 47 agents, 196 skills, and 79 legacy command shims が利用可能です。
+Claude Code利用時には access to 47 agents, 200 skills, and 79 legacy command shims が利用可能です。
 
 | カテゴリ | 数 |
 |---------|-----|
 | **Agents** | 47 agents |
-| **Skills** | 196 skills |
+| **Skills** | 200 skills |
 | **Commands** | 79 commands |
+
+### マルチハーネス対応
+
+| Feature | Claude Code | Cursor IDE | Codex CLI | OpenCode |
+|---------|------------|------------|-----------|----------|
+| **Agents** | 47 | Shared (AGENTS.md) | Shared (AGENTS.md) | 12 |
+| **Commands** | 79 | Shared | Instruction-based | 31 |
+| **Skills** | 200 | Shared | 10 (native format) | 37 |
 
 ---
 

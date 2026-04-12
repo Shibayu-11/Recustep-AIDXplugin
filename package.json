@@ -91,7 +91,7 @@
     "postinstall": "echo '\\n  ecc-universal installed!\\n  Run: npx ecc typescript\\n  Compat: npx ecc-install typescript\\n  Docs: https://github.com/affaan-m/everything-claude-code\\n'",
     "catalog:check": "node scripts/ci/catalog.js --text",
     "catalog:sync": "node scripts/ci/catalog.js --write --text",
-    "lint": "eslint . && markdownlint '**/*.md' --ignore node_modules --ignore gbrain --ignore gstack --ignore brain-template --ignore aidx_agents --ignore tools --ignore templates --ignore '**/CLAUDE.md'",
+    "lint": "eslint . && markdownlint '**/*.md' --ignore node_modules --ignore gbrain --ignore gstack --ignore brain-template --ignore aidx_agents --ignore tools --ignore templates --ignore opendataloader-pdf --ignore '**/CLAUDE.md'",
     "harness:audit": "node scripts/harness-audit.js",
     "claw": "node scripts/claw.js",
     "orchestrate:status": "node scripts/orchestration-status.js",

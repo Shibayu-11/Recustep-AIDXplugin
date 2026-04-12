@@ -3,7 +3,7 @@ const globals = require('globals');
 
 module.exports = [
     {
-        ignores: ['.opencode/dist/**', '.cursor/**', 'node_modules/**', 'gbrain/**', 'gstack/**', 'aidx_agents/**', 'tools/**', 'templates/**', 'brain-template/**']
+        ignores: ['.opencode/dist/**', '.cursor/**', 'node_modules/**', 'gbrain/**', 'gstack/**', 'aidx_agents/**', 'tools/**', 'templates/**', 'brain-template/**', 'opendataloader-pdf/**']
     },
     js.configs.recommended,
     {
